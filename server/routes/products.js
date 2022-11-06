@@ -7,6 +7,10 @@ const { default: mongoose } = require('mongoose');
 // GET
 router.get('/', async (req, res) => {
     try {
+        if (req.query.categoryId) {
+            res.send(await Product.find({categories: req.query.categoryId}))
+            return;
+        }
         res.send(await Product.find())
     } catch (err) {
         res.status(500).json({ error: err.message })

@@ -6,11 +6,15 @@ const Category = require('../models/category');
 //GET
 router.get('/', async (req, res) => {
     try {
-        res.send(await Category.find())
+        if (req.query.productId) {
+            res.send(await Category.find({products: req.query.productId}))
+            return;
+        }
+        res.send(await Category.find());
     } catch (err) {
-        res.status(500).json({ error: err.message })
+        res.status(500).json({ error: err.message });
     }
-})
+});
 
 // GET BY ID
 router.get('/:id', async (req, res) => {
@@ -28,6 +32,6 @@ router.get('/:id', async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message })
     }
-})
+});
 
 module.exports = router;
