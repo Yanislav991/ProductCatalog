@@ -8,10 +8,10 @@ const { default: mongoose } = require('mongoose');
 router.get('/', async (req, res) => {
     try {
         if (req.query.categoryId) {
-            res.send(await Product.find({categories: req.query.categoryId}))
+            res.send(await Product.find({ categories: req.query.categoryId }))
             return;
         }
-        res.send(await Product.find())
+        res.send(await Product.find().populate('categories'))
     } catch (err) {
         res.status(500).json({ error: err.message })
     }
@@ -24,7 +24,7 @@ router.get('/:id', async (req, res) => {
             res.status(404).send({ message: 'Not Found!' });
             return;
         }
-        let currentProduct = await Product.findById(req.params.id);
+        let currentProduct = await Product.findById(req.params.id).populate('categories');
         if (!currentProduct) {
             res.status(404).send({ message: 'Not Found!' })
             return;
@@ -44,7 +44,7 @@ router.post('/', async (req, res) => {
             quantity: req.body.quantity,
             description: req.body.description,
             categories: req.body.categories
-        })
+        }).populate('categories')
         await Category.updateMany({ _id: newProduct.categories }, { $push: { products: newProduct._id } })
         res.status(201).send(newProduct);
     } catch (err) {
@@ -60,7 +60,7 @@ router.patch('/:id', async (req, res) => {
             res.status(404).send({ message: 'Not Found!' });
             return;
         }
-        let currentProduct = await Product.findById(id);
+        let currentProduct = await Product.findById(id).populate('categories');
         if (!currentProduct) {
             res.status(404).send({ message: 'Not Found!' });
             return;
@@ -68,7 +68,7 @@ router.patch('/:id', async (req, res) => {
         await Category.updateMany({ _id: currentProduct.categories }, { $pullAll: { products: [{ _id: id }] } })
         let newProduct = await Product.findOneAndUpdate({ _id: id }, req.body, {
             returnOriginal: false
-        });
+        }).populate('categories');
         await Category.updateMany({ _id: newProduct.categories }, { $push: { products: id } })
         res.status(201).send(newProduct);
     } catch (err) {
