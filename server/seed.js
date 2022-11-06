@@ -1,5 +1,6 @@
 const { default: mongoose } = require("mongoose");
-const category = require("./models/category")
+const category = require("./models/category");
+const product = require("./models/product");
 
 const seedCategories = [
     {
@@ -18,17 +19,34 @@ const seedCategories = [
 
 const seedProducts = [
     {
-        name: "Juice TEST update 555",
-        description: "The best juice 2",
+        name: "Juice",
+        description: "The best juice.",
         price: 255,
         quantity: 101,
-        categories: ["63681572260c551d23937418"]
+        categories: []
+    },
+    {
+        name: "Pizza",
+        description: "The best pizza",
+        price: 505,
+        quantity: 202,
+        categories: []
     }
 ]
 
 const seedDB = async () => {
     await category.deleteMany({});
     await category.insertMany(seedCategories);
+    await product.deleteMany({});
+    await product.insertMany(seedProducts);
+    let foodCategory = await category.findOne({ name: "Food" });
+    let drinksCategory = await category.findOne({ name: "Drinks" });
+    let juice = await product.findOne({name: "Juice"})
+    let pizza = await product.findOne({name: "Pizza"})
+    await category.findOneAndUpdate({name:"Food"}, {products:[pizza._id]});
+    await category.findOneAndUpdate({name:"Drinks"}, {products:[juice._id]});
+    await product.findOneAndUpdate({name:"Juice"}, {categories:[drinksCategory._id]});
+    await product.findOneAndUpdate({name:"Pizza"}, {categories:[foodCategory._id]});
 }
 
 seedDB().then(() => {
