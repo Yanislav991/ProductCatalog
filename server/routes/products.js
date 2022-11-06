@@ -45,16 +45,10 @@ router.patch('/:id', async (req, res) => {
     try {
         let id = req.params.id;
         let currentProduct = await Product.findById(id);
-        console.log("CUR ---------------");
-        console.log(currentProduct);
-        console.log("CUR ---------------");
         await Category.updateMany({ '_id': currentProduct.categories }, { $pullAll: { 'products': [{ _id: id }] } })
         let newProduct = await Product.findOneAndUpdate({ _id: id }, req.body, {
             returnOriginal: false
         });
-        console.log("NEW ---------------");
-        console.log(newProduct);
-        console.log("NEW ---------------");
         await Category.updateMany({ '_id': newProduct.categories }, { $push: { products: id } })
         res.status(201).send(newProduct);
     } catch (err) {
