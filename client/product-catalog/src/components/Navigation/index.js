@@ -16,10 +16,6 @@ const Navigation = () => {
                     <NavLink className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4" to="/products/all">Products</NavLink>
                     <NavLink className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4" to="/products/add">Add Product</NavLink>
                 </div>
-                <div>
-                    <Button to='/login'>Login</Button>
-                    <Button to='/register'>Register</Button>
-                </div>
             </div>
         </nav>
     )
