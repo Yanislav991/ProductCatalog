@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useInputChange } from "../../hoc/useInputChange";
 import Multiselect from 'multiselect-react-dropdown';
+import { post, get } from "../../util/data";
 
 const AddProduct = () => {
 
@@ -8,28 +9,14 @@ const AddProduct = () => {
     const [options, setOptions] = useState();
     useEffect(() => {
         if (!options) {
-            fetch("http://localhost:3000/categories")
-                .then(res => res.json())
+            get("/categories")
                 .then(data => setOptions(data));
         }
     }, [])
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch('http://localhost:3000/products', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(input),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log('Success:', data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+        post('/products', input).then(res=>console.log(res))
     }
 
     const handleSelect = (e) => {
