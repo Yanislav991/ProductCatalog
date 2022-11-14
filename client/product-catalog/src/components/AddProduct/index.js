@@ -1,12 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useInputChange } from "../../hoc/useInputChange";
+import Multiselect from 'multiselect-react-dropdown';
 
 const AddProduct = () => {
 
     const [input, handleInputChange] = useInputChange();
-    const handleSubmit = (e) =>{
+    const [options, setOptions] = useState();
+    useEffect(() => {
+        if (!options) {
+            fetch("http://localhost:3000/categories")
+                .then(res => res.json())
+                .then(data => setOptions(data));
+        }
+    }, [])
+
+    const handleSubmit = (e) => {
         e.preventDefault();
-        // send input to the server
+        fetch('http://localhost:3000/products', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(input),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    const handleSelect = (e) => {
+        console.log(e)
+        handleInputChange({ currentTarget: { name: 'categories', value: e } })
     }
 
     return (
@@ -38,6 +66,16 @@ const AddProduct = () => {
                                 Image
                             </label>
                             <input onChange={handleInputChange} className="block w-full text-lg bg-gray-50 rounded-lg border border-white cursor-pointer text-teal-100 focus:outline-none dark:bg-teal-500 dark:placeholder-gray-400" id="image" name="image" type="file" />
+                        </div>
+                        <div className="w-full md px-3 mb-6 md:mb-0">
+                            <label className="block mb-2 text-sm font-medium text-white" htmlFor="image">
+                                Categories
+                            </label>
+                            <Multiselect options={options}
+                                onSelect={handleSelect}
+                                displayValue="name">
+
+                            </Multiselect>
                         </div>
                     </div>
                     <div className="flex flex-wrap -mx-3 mb-6">

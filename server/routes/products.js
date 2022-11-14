@@ -44,7 +44,7 @@ router.post('/', async (req, res) => {
             quantity: req.body.quantity,
             description: req.body.description,
             categories: req.body.categories
-        }).populate('categories')
+        })
         await Category.updateMany({ _id: newProduct.categories }, { $push: { products: newProduct._id } })
         res.status(201).send(newProduct);
     } catch (err) {

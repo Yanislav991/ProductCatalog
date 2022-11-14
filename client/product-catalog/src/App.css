@@ -10,3 +10,7 @@
 textarea{
     resize: none;
 }
+.multiSelectContainer{
+    background-color: #E5E7EB;
+    border-radius: 0.25rem;
+}
