@@ -17,7 +17,7 @@ const Card = (props) => {
                     )))}
             </div>
             <div className="px-6 pt-4 pb-2">
-                <Button to={"/products/details?" + props.item._id}>Details</Button>
+                <Button to={"/products/details/" + props.item._id}>Details</Button>
                 <Button>Edit</Button>
             </div>
         </div>

@@ -4,7 +4,6 @@ import Multiselect from 'multiselect-react-dropdown';
 import { post, get } from "../../util/data";
 
 const AddProduct = () => {
-
     const [input, handleInputChange] = useInputChange();
     const [options, setOptions] = useState();
     useEffect(() => {
@@ -13,17 +12,14 @@ const AddProduct = () => {
                 .then(data => setOptions(data));
         }
     }, [])
-
     const handleSubmit = (e) => {
         e.preventDefault();
         post('/products', input).then(res=>console.log(res))
     }
-
     const handleSelect = (e) => {
         console.log(e)
         handleInputChange({ currentTarget: { name: 'categories', value: e } })
     }
-
     return (
         <section id="add-product-wrapper" className="flex items-center justify-center mt-36">
             <div className="p-6 w-full max-w-xl bg-white rounded-lg border border-gray-200  dark:bg-teal-500 dark:border-teal-400">

@@ -1,0 +1,17 @@
+.detailsWrapper{
+    display: flex;
+    padding: 3rem;
+    border: 1px solid teal;
+    border-radius: 8px;
+    margin: 2rem;
+}
+
+.infoWrapper{
+    text-align: center;
+    width: 50%;
+    font-size: 4rem;
+}
+
+.imageWrapper{
+    width: 50%;
+}
